@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, Res, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Controller, Post, Body, Req, Res, UnauthorizedException, UseGuards, ConflictException } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { JwtAuthGuard } from './jwt-auth.guard';
@@ -6,6 +6,17 @@ import { JwtAuthGuard } from './jwt-auth.guard';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+
+  @Post('register')
+  async register(@Body() registerDto: { email: string; password: string }, @Res() res: Response) {
+    const user = await this.authService.register(registerDto.email, registerDto.password);
+    if (!user) throw new ConflictException('User already exists');
+
+    const { accessToken, refreshToken } = await this.authService.login(user);
+    res.cookie('refresh_token', refreshToken, { httpOnly: true, secure: true, sameSite: 'strict' });
+
+    return res.json({ accessToken });
+  }
 
   @Post('login')
   async login(@Body() loginDto: { email: string; password: string }, @Res() res: Response) {

@@ -109,18 +109,18 @@ import {
     }
 
     @Get('protected')
-  @UseGuards(JwtAuthGuard)
-  async protectedRoute(@Req() req) {
-    console.log('User from JWT:', req.user);
-    return { message: 'This is a protected route', user: req.user };
-  }
+    @UseGuards(JwtAuthGuard)
+    async protectedRoute(@Req() req) {
+      console.log('User from JWT:', req.user);
+      return { message: 'This is a protected route', user: req.user };
+    }
   
     @UseGuards(JwtAuthGuard)
-  @Delete(':id')
-  async deleteEvent(
-    @Param('id') id: string,
-    @Body('password') password: string,
-  ): Promise<{ message: string }> {
+    @Delete(':id')
+    async deleteEvent(
+      @Param('id') id: string,
+      @Body('password') password: string,
+    ): Promise<{ message: string }> {
     try {
       this.logger.debug(`Attempting to delete event with ID: ${id}`);
       
