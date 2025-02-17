@@ -56,8 +56,8 @@ export class EventService {
   
 
   async createEvent(data: Prisma.EventCreateInput): Promise<Event> {
-    if (data.thumbnailUrl && typeof data.thumbnailUrl === 'string') {
-      data.thumbnailUrl = data.thumbnailUrl.replace(/\\/g, '/');
+    if (data.thumbnailUrl) {
+      data.thumbnailUrl = data.thumbnailUrl;
     }
   
     return this.prisma.event.create({ data });
@@ -66,8 +66,8 @@ export class EventService {
   async updateEvent(params: { where: Prisma.EventWhereUniqueInput; data: Prisma.EventUpdateInput }): Promise<Event> {
     const { where, data } = params;
   
-    if (data.thumbnailUrl && typeof data.thumbnailUrl === 'string') {
-      data.thumbnailUrl = data.thumbnailUrl.replace(/\\/g, '/');
+    if (data.thumbnailUrl) {
+      data.thumbnailUrl = data.thumbnailUrl;
     }
   
     return this.prisma.event.update({ where, data });
